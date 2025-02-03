@@ -9,20 +9,20 @@
 
     - name: Gather facts
       setup:
-            
+
     - name: Print python version
       debug:
         msg: "Using Python {{ ansible_python_version }}"
-              
+
     - name: Install dependencies
-      shell: "/usr/bin/python3.10.12 -m pip install {{ item }}"
+      shell: "/usr/bin/python3.10 -m pip install {{ item }}"
       loop:
-       - boto3
-       - botocore
+        - boto3
+        - botocore
 
   vars:
     ansible_python_interpreter: /usr/bin/python3.10
-    keypair: my linux
+    keypair: my-linux-key  # Ensure this matches the AWS key pair name
     instance_type: t2.micro
     image_id: ami-0e1bed4f06a3b463d
     wait: yes
@@ -62,7 +62,7 @@
             cidr_ip: 0.0.0.0/0
         rules_egress:
           - proto: all
-            cidr_ip: 0.0.0.0/0   
+            cidr_ip: 0.0.0.0/0
       register: basic_firewall
 
     - name: Launch the new EC2 Instance
@@ -74,10 +74,7 @@
         region: "{{ region }}"
         key_name: "{{ keypair }}"
         count: "{{ count }}"
-<<<<<<< HEAD:ec2.yml
-=======
         tags: "{{ tag_name }}"
->>>>>>> 8a4f7adb77293a7d086f98dfa3d01770078bbc46:ec2.yaml
         user_data: |
           #!/bin/bash
           sudo apt update -y
@@ -86,3 +83,4 @@
           sudo systemctl enable docker
           sudo docker run -d --name 2048 -p 3000:3000 sevenajay/2048:latest
       register: ec2
+
